@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { defaultSiteContent } from '../data/siteContent';
 
 const STORAGE_KEY = 'photo-print-site-content';
@@ -28,6 +28,7 @@ function mergeContent(savedContent) {
 }
 
 export function SiteContentProvider({ children }) {
+  const [isLoaded, setIsLoaded] = useState(false);
   const [content, setContent] = useState(() => {
     try {
       const savedContent = window.localStorage.getItem(STORAGE_KEY);
@@ -40,6 +41,40 @@ export function SiteContentProvider({ children }) {
 
     return defaultSiteContent;
   });
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function syncContent() {
+      try {
+        const response = await fetch('/api/site-content');
+
+        if (!response.ok) {
+          throw new Error('Unable to fetch site content.');
+        }
+
+        const data = await response.json();
+
+        if (!isCancelled) {
+          const mergedContent = mergeContent(defaultSiteContent, data.content);
+          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(mergedContent));
+          setContent(mergedContent);
+          setIsLoaded(true);
+        }
+      } catch (error) {
+        console.error('Unable to sync remote site content.', error);
+        if (!isCancelled) {
+          setIsLoaded(true);
+        }
+      }
+    }
+
+    syncContent();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
 
   const updateContent = (section, value) => {
     setContent((currentContent) => {
@@ -61,10 +96,12 @@ export function SiteContentProvider({ children }) {
   const contextValue = useMemo(
     () => ({
       content,
+      isLoaded,
+      setContent,
       updateContent,
       resetContent,
     }),
-    [content],
+    [content, isLoaded],
   );
 
   return (
