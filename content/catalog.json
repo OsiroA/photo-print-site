@@ -85,6 +85,18 @@
         "A3": 40,
         "A2": 60
       }
+    },
+    {
+      "id": "today",
+      "title": "Today",
+      "collection": "fine-art",
+      "theme": "colour",
+      "image": "/images/cms/1775678318147-img_5797.png",
+      "sizes": {
+        "A4": 40,
+        "A3": 60,
+        "A2": 80
+      }
     }
   ]
 }
