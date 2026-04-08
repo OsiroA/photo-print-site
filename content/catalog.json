@@ -61,6 +61,18 @@
         "A3": 38,
         "A2": 58
       }
+    },
+    {
+      "id": "street-pic",
+      "title": "street pic",
+      "collection": "fine-art",
+      "theme": "colour",
+      "image": "/images/cms/1775677900231-whatsapp-image-2026-01-02-at-4.42.18-pm-1-.jpeg",
+      "sizes": {
+        "A4": 32,
+        "A3": 234,
+        "A2": 232
+      }
     }
   ]
 }
