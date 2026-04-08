@@ -51,6 +51,8 @@ export default function Admin() {
   const [themeForm, setThemeForm] = useState(emptyThemeForm());
   const [productForm, setProductForm] = useState(emptyProductForm());
   const [uploadStatus, setUploadStatus] = useState('');
+  const [showAdvancedTheme, setShowAdvancedTheme] = useState(false);
+  const [showAdvancedProduct, setShowAdvancedProduct] = useState(false);
 
   const aboutParagraphs = useMemo(
     () => content.about.paragraphs.join('\n\n'),
@@ -259,7 +261,7 @@ export default function Admin() {
     event.preventDefault();
 
     if (!productForm.title.trim() || !productForm.image.trim()) {
-      setCatalogMessage('Artwork title and image are required.');
+      setCatalogMessage('Artwork title and image are required. Upload an image or paste an existing path.');
       return;
     }
 
@@ -342,7 +344,7 @@ export default function Admin() {
       }
 
       if (target === 'theme') {
-        setThemeForm((current) => ({ ...current, coverImage: data.path }));
+      setThemeForm((current) => ({ ...current, coverImage: data.path }));
       } else {
         setProductForm((current) => ({ ...current, image: data.path }));
       }
@@ -513,7 +515,7 @@ export default function Admin() {
           <p className="admin-eyebrow">Catalog</p>
           <h1>Collections and artworks</h1>
           <p>
-            Add, edit, and remove sections and artworks here. Uploaded images are committed into the repo and published on the next deployment.
+            Add, edit, and remove sections and artworks here. Upload an image first, then save. New uploads are published after the next deployment completes.
           </p>
         </div>
 
@@ -521,37 +523,65 @@ export default function Admin() {
           <form className="admin-card" onSubmit={handleThemeSubmit}>
             <h2>Fine art section</h2>
             <label>
-              Title
+              Section title
               <input
+                placeholder="Example: Black & White"
                 value={themeForm.title}
                 onChange={(event) => setThemeForm((current) => ({ ...current, title: event.target.value }))}
               />
             </label>
             <p className="admin-help">
-              The section link is generated automatically from the title.
+              We create the section link automatically from the title.
             </p>
             <label>
-              Description
+              Short description
               <textarea
                 rows="4"
+                placeholder="A short sentence describing this collection."
                 value={themeForm.description}
                 onChange={(event) => setThemeForm((current) => ({ ...current, description: event.target.value }))}
               />
             </label>
-            <label>
-              Cover image path
-              <input
-                value={themeForm.coverImage}
-                onChange={(event) => setThemeForm((current) => ({ ...current, coverImage: event.target.value }))}
-              />
-            </label>
-            <label>
-              Upload cover image
-              <input type="file" accept="image/*" onChange={(event) => handleImageUpload(event, 'theme')} />
-            </label>
+            <div className="admin-upload-block">
+              <label className="admin-upload-label">
+                Cover image
+                <input type="file" accept="image/*" onChange={(event) => handleImageUpload(event, 'theme')} />
+              </label>
+              {themeForm.coverImage ? (
+                <div className="admin-preview">
+                  <img src={themeForm.coverImage} alt="Section preview" />
+                  <p>{themeForm.coverImage}</p>
+                </div>
+              ) : (
+                <p className="admin-help">Upload a cover image for this section.</p>
+              )}
+            </div>
+            <button
+              type="button"
+              className="admin-linkish"
+              onClick={() => setShowAdvancedTheme((current) => !current)}
+            >
+              {showAdvancedTheme ? 'Hide advanced options' : 'Show advanced options'}
+            </button>
+            {showAdvancedTheme ? (
+              <label>
+                Image path
+                <input
+                  value={themeForm.coverImage}
+                  onChange={(event) => setThemeForm((current) => ({ ...current, coverImage: event.target.value }))}
+                />
+              </label>
+            ) : null}
             <div className="admin-actions">
               <button type="submit" className="admin-primary" disabled={isCatalogSaving}>
                 {isCatalogSaving ? 'Saving...' : 'Save section'}
+              </button>
+              <button
+                type="button"
+                className="admin-secondary"
+                onClick={() => setThemeForm(emptyThemeForm())}
+              >
+                Clear form
               </button>
             </div>
           </form>
@@ -559,14 +589,15 @@ export default function Admin() {
           <form className="admin-card" onSubmit={handleProductSubmit}>
             <h2>Artwork</h2>
             <label>
-              Title
+              Artwork title
               <input
+                placeholder="Example: Madonna Shrine"
                 value={productForm.title}
                 onChange={(event) => setProductForm((current) => ({ ...current, title: event.target.value }))}
               />
             </label>
             <p className="admin-help">
-              The artwork reference is generated automatically from the title.
+              We generate the internal reference automatically from the title.
             </p>
             <label>
               Collection
@@ -579,7 +610,7 @@ export default function Admin() {
               </select>
             </label>
             <label>
-              Fine art section
+              Section
               <select
                 value={productForm.theme}
                 onChange={(event) => setProductForm((current) => ({ ...current, theme: event.target.value }))}
@@ -591,20 +622,43 @@ export default function Admin() {
                 ))}
               </select>
             </label>
-            <label>
-              Image path
-              <input
-                value={productForm.image}
-                onChange={(event) => setProductForm((current) => ({ ...current, image: event.target.value }))}
-              />
-            </label>
-            <label>
-              Upload artwork image
-              <input type="file" accept="image/*" onChange={(event) => handleImageUpload(event, 'product')} />
-            </label>
+            <div className="admin-upload-block">
+              <label className="admin-upload-label">
+                Artwork image
+                <input type="file" accept="image/*" onChange={(event) => handleImageUpload(event, 'product')} />
+              </label>
+              {productForm.image ? (
+                <div className="admin-preview">
+                  <img src={productForm.image} alt="Artwork preview" />
+                  <p>{productForm.image}</p>
+                </div>
+              ) : (
+                <p className="admin-help">Upload the artwork image before saving.</p>
+              )}
+            </div>
+            <button
+              type="button"
+              className="admin-linkish"
+              onClick={() => setShowAdvancedProduct((current) => !current)}
+            >
+              {showAdvancedProduct ? 'Hide advanced options' : 'Show advanced options'}
+            </button>
+            {showAdvancedProduct ? (
+              <label>
+                Image path
+                <input
+                  value={productForm.image}
+                  onChange={(event) => setProductForm((current) => ({ ...current, image: event.target.value }))}
+                />
+              </label>
+            ) : null}
+            <div className="admin-price-intro">
+              <strong>Print prices</strong>
+              <p>Enter numbers only. The dollar sign is added automatically on the live site.</p>
+            </div>
             <div className="admin-three">
               <label>
-                A4
+                A4 price
                 <input
                   type="number"
                   min="0"
@@ -616,7 +670,7 @@ export default function Admin() {
                 />
               </label>
               <label>
-                A3
+                A3 price
                 <input
                   type="number"
                   min="0"
@@ -628,7 +682,7 @@ export default function Admin() {
                 />
               </label>
               <label>
-                A2
+                A2 price
                 <input
                   type="number"
                   min="0"
@@ -643,6 +697,13 @@ export default function Admin() {
             <div className="admin-actions">
               <button type="submit" className="admin-primary" disabled={isCatalogSaving}>
                 {isCatalogSaving ? 'Saving...' : 'Save artwork'}
+              </button>
+              <button
+                type="button"
+                className="admin-secondary"
+                onClick={() => setProductForm(emptyProductForm())}
+              >
+                Clear form
               </button>
             </div>
           </form>
@@ -659,7 +720,7 @@ export default function Admin() {
                 <div key={theme.slug} className="admin-list-item">
                   <div>
                     <strong>{theme.title}</strong>
-                    <p>{theme.slug}</p>
+                    <p>{theme.description || 'No description yet.'}</p>
                   </div>
                   <div className="admin-inline-actions">
                     <button
@@ -689,7 +750,11 @@ export default function Admin() {
                 <div key={product.id} className="admin-list-item">
                   <div>
                     <strong>{product.title}</strong>
-                    <p>{product.collection}{product.theme ? ` / ${product.theme}` : ''}</p>
+                    <p>
+                      {product.collection === 'fine-art'
+                        ? `Fine Art${product.theme ? ` / ${product.theme}` : ''}`
+                        : 'Stock & Licensing'}
+                    </p>
                   </div>
                   <div className="admin-inline-actions">
                     <button

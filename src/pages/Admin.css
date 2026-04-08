@@ -41,6 +41,16 @@
   margin: -0.4rem 0 0;
 }
 
+.admin-price-intro {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.admin-price-intro p {
+  color: var(--color-muted);
+  margin: 0;
+}
+
 .admin-form {
   display: grid;
   gap: 1.25rem;
@@ -98,6 +108,51 @@
   color: var(--color-text);
   font: inherit;
   padding: 0.85rem 1rem;
+}
+
+.admin-upload-block {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.admin-upload-label input[type="file"] {
+  padding: 0.6rem 0;
+}
+
+.admin-preview {
+  background: #fffdf9;
+  border: 1px solid rgba(116, 77, 51, 0.12);
+  border-radius: 18px;
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+.admin-preview img {
+  background: #eadfce;
+  border-radius: 14px;
+  height: 220px;
+  object-fit: contain;
+  object-position: center top;
+  width: 100%;
+}
+
+.admin-preview p {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  margin: 0;
+  word-break: break-all;
+}
+
+.admin-linkish {
+  background: none;
+  border: none;
+  color: var(--color-accent-dark);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  justify-self: start;
+  padding: 0;
 }
 
 .admin-card textarea {

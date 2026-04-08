@@ -1,56 +1,40 @@
 import crypto from 'node:crypto';
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import defaultSiteContent from '../content/site-content.json' with { type: 'json' };
+import defaultCatalog from '../content/catalog.json' with { type: 'json' };
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const SESSION_COOKIE = 'cms_session';
-const defaultsCache = new Map();
 
-function mergeSiteContent(defaultContent, savedContent) {
+function mergeSiteContent(baseContent, savedContent) {
   if (!savedContent) {
-    return defaultContent;
+    return baseContent;
   }
 
   return {
-    ...defaultContent,
+    ...baseContent,
     ...savedContent,
-    brand: { ...defaultContent.brand, ...savedContent.brand },
-    home: { ...defaultContent.home, ...savedContent.home },
+    brand: { ...baseContent.brand, ...savedContent.brand },
+    home: { ...baseContent.home, ...savedContent.home },
     about: {
-      ...defaultContent.about,
+      ...baseContent.about,
       ...savedContent.about,
       paragraphs:
         savedContent.about?.paragraphs?.length
           ? savedContent.about.paragraphs
-          : defaultContent.about.paragraphs,
+          : baseContent.about.paragraphs,
     },
-    socials: { ...defaultContent.socials, ...savedContent.socials },
+    socials: { ...baseContent.socials, ...savedContent.socials },
   };
 }
 
-function mergeCatalog(defaultCatalog, savedCatalog) {
+function mergeCatalog(baseCatalog, savedCatalog) {
   return {
     fineArtThemes: Array.isArray(savedCatalog?.fineArtThemes)
       ? savedCatalog.fineArtThemes
-      : defaultCatalog.fineArtThemes,
+      : baseCatalog.fineArtThemes,
     products: Array.isArray(savedCatalog?.products)
       ? savedCatalog.products
-      : defaultCatalog.products,
+      : baseCatalog.products,
   };
-}
-
-async function readDefaultJson(relativePath) {
-  if (defaultsCache.has(relativePath)) {
-    return defaultsCache.get(relativePath);
-  }
-
-  const fullPath = path.join(__dirname, '..', relativePath);
-  const rawContent = await fs.readFile(fullPath, 'utf8');
-  const parsed = JSON.parse(rawContent);
-  defaultsCache.set(relativePath, parsed);
-  return parsed;
 }
 
 async function githubRequest(url, options = {}) {
@@ -91,7 +75,7 @@ export function getCookieValue(cookieHeader, name) {
 
   const cookies = cookieHeader.split(';').map((cookie) => cookie.trim());
   const matched = cookies.find((cookie) => cookie.startsWith(`${name}=`));
-  return matched ? decodeURIComponent(matched.split('=')[1] || '') : '';
+  return matched ? decodeURIComponent(matched.split('=').slice(1).join('=')) : '';
 }
 
 export function setSessionCookie(response, password) {
@@ -120,36 +104,34 @@ export function isAuthenticated(request) {
   return cookieValue === createSessionToken(adminPassword);
 }
 
-async function loadJsonFromGithubOrDefault(defaultPath, mergeFn, envKeyPathName) {
-  const defaults = await readDefaultJson(defaultPath);
+async function loadJsonFromGithubOrDefault(baseData, mergeFn, envKeyPathName, fallbackPath) {
   const { owner, repo } = getRepoConfig();
-  const filePath = process.env[envKeyPathName] || defaultPath;
+  const filePath = process.env[envKeyPathName] || fallbackPath;
 
   if (!process.env.GITHUB_TOKEN || !owner || !repo) {
-    return defaults;
+    return baseData;
   }
 
   try {
     const response = await githubRequest(buildContentsApiUrl(filePath, true));
 
     if (!response.ok) {
-      return defaults;
+      return baseData;
     }
 
     const githubFile = await response.json();
     const decodedContent = Buffer.from(githubFile.content, 'base64').toString('utf8');
-    return mergeFn(defaults, JSON.parse(decodedContent));
+    return mergeFn(baseData, JSON.parse(decodedContent));
   } catch (error) {
     console.error(`Unable to load ${filePath} from GitHub.`, error);
-    return defaults;
+    return baseData;
   }
 }
 
-async function saveJsonToGithub(defaultPath, envKeyPathName, data, mergeFn, message) {
-  const defaults = await readDefaultJson(defaultPath);
-  const mergedData = mergeFn(defaults, data);
+async function saveJsonToGithub(baseData, envKeyPathName, data, mergeFn, message, fallbackPath) {
+  const mergedData = mergeFn(baseData, data);
   const { owner, repo, branch } = getRepoConfig();
-  const filePath = process.env[envKeyPathName] || defaultPath;
+  const filePath = process.env[envKeyPathName] || fallbackPath;
 
   if (!process.env.GITHUB_TOKEN || !owner || !repo) {
     throw new Error('Missing GitHub CMS environment variables.');
@@ -183,30 +165,42 @@ async function saveJsonToGithub(defaultPath, envKeyPathName, data, mergeFn, mess
 }
 
 export async function loadSiteContent() {
-  return loadJsonFromGithubOrDefault('content/site-content.json', mergeSiteContent, 'CMS_CONTENT_PATH');
+  return loadJsonFromGithubOrDefault(
+    defaultSiteContent,
+    mergeSiteContent,
+    'CMS_CONTENT_PATH',
+    'content/site-content.json',
+  );
 }
 
 export async function saveSiteContent(content) {
   return saveJsonToGithub(
-    'content/site-content.json',
+    defaultSiteContent,
     'CMS_CONTENT_PATH',
     content,
     mergeSiteContent,
     'Update site content from CMS',
+    'content/site-content.json',
   );
 }
 
 export async function loadCatalog() {
-  return loadJsonFromGithubOrDefault('content/catalog.json', mergeCatalog, 'CMS_CATALOG_PATH');
+  return loadJsonFromGithubOrDefault(
+    defaultCatalog,
+    mergeCatalog,
+    'CMS_CATALOG_PATH',
+    'content/catalog.json',
+  );
 }
 
 export async function saveCatalog(catalog) {
   return saveJsonToGithub(
-    'content/catalog.json',
+    defaultCatalog,
     'CMS_CATALOG_PATH',
     catalog,
     mergeCatalog,
     'Update catalog from CMS',
+    'content/catalog.json',
   );
 }
 
