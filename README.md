@@ -1,41 +1,39 @@
 # Jose Cosme Photography
 
-React + Vite portfolio site prepared for a low-cost Cloudflare launch.
+React + Vite portfolio site prepared for a low-cost Vercel launch.
 
 ## Launch stack
 
-- Frontend: Cloudflare Pages
-- Checkout API: Cloudflare Pages Functions
-- Images: start with bundled assets now, move to R2 or Cloudflare Images later
-- Custom domain: add through Cloudflare Pages after first deploy
+- Frontend: Vercel
+- Checkout API: Vercel Serverless Function
+- Images: bundled assets for launch, with room to move to a CDN workflow later
+- Custom domain: add in Vercel after first deploy
 
 ## Environment variables
 
-For Cloudflare Pages / Functions:
+Set these in Vercel Project Settings:
 
 - `STRIPE_SECRET_KEY`
 - `CLIENT_URL`
 - optional `VITE_API_URL`
 
-For the Cloudflare setup in this repo, leave `VITE_API_URL` unset so the frontend uses the local `/api` function path automatically.
+Leave `VITE_API_URL` unset for the default Vercel setup so the frontend uses `/api` automatically.
 
-For local Cloudflare-style development, copy `.dev.vars.example` to `.dev.vars` and fill in your real values.
+## Deploy on Vercel
 
-## Deploy on Cloudflare Pages
-
-1. Push this repo to GitHub.
-2. In Cloudflare Pages, create a new project from that repo.
-3. Use these build settings:
+1. Import this GitHub repo into Vercel.
+2. Use:
+   - Framework preset: `Vite`
    - Build command: `npm run build`
-   - Build output directory: `dist`
-4. Add environment variables:
+   - Output directory: `dist`
+3. Add:
    - `STRIPE_SECRET_KEY`
    - `CLIENT_URL`
-5. Deploy.
-6. Attach your custom domain in Cloudflare Pages.
+4. Deploy.
+5. Attach your custom domain in Vercel.
 
 ## Notes
 
-- The Stripe checkout endpoint is implemented in `functions/api/create-checkout-session.js`.
-- React client-side routes are handled by `public/_redirects`.
-- The `/studio` route is a temporary browser-local editor, not yet a shared client CMS.
+- The Stripe checkout endpoint is implemented in `api/create-checkout-session.js`.
+- SPA routing is handled by `vercel.json`.
+- The `/studio` route is still a temporary browser-local editor, not yet a shared client CMS.
