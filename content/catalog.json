@@ -73,6 +73,18 @@
         "A3": 234,
         "A2": 232
       }
+    },
+    {
+      "id": "relaxing",
+      "title": "Relaxing",
+      "collection": "stock",
+      "theme": "",
+      "image": "/images/cms/1775678110296-img_5802.png",
+      "sizes": {
+        "A4": 20,
+        "A3": 40,
+        "A2": 60
+      }
     }
   ]
 }
