@@ -45,6 +45,11 @@
   font-size: 1.45rem;
 }
 
+.theme-card p {
+  color: var(--color-muted);
+  margin: 0 18px 20px;
+}
+
 .theme-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 24px 44px rgba(67, 40, 24, 0.14);

@@ -1,15 +1,27 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import productData from '../productData';
 import './Product.css';
+import { useCatalog } from '../context/CatalogContext';
 
 export default function Product() {
   const { id } = useParams();
-  const product = productData[id];
+  const { catalog, isLoaded } = useCatalog();
+  const product = catalog.products.find((item) => item.id === id);
   const apiBaseUrl = import.meta.env.VITE_API_URL || '/api';
 
   const [size, setSize] = useState('A4');
   const [quantity, setQuantity] = useState(1);
+
+  if (!isLoaded) {
+    return (
+      <main className="product-page">
+        <div className="product-shell product-shell-missing">
+          <h1>Loading artwork</h1>
+          <p>Please wait while we load this piece.</p>
+        </div>
+      </main>
+    );
+  }
 
   if (!product) {
     return (

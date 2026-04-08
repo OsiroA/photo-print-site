@@ -1,0 +1,66 @@
+export const defaultCatalog = {
+  fineArtThemes: [
+    {
+      slug: 'black-and-white',
+      title: 'Black & White',
+      description: 'Monochrome works shaped by contrast, stillness, and devotional atmosphere.',
+      coverImage: '/images/black-and-white/statue.jpeg',
+    },
+    {
+      slug: 'colour',
+      title: 'Colour',
+      description: 'Colour studies exploring architecture, gesture, and urban rhythm.',
+      coverImage: '/images/architecture/boy-and-girl-statue.jpeg',
+    },
+  ],
+  products: [
+    {
+      id: 'black-and-white-statue',
+      title: 'Madonna Shrine',
+      collection: 'fine-art',
+      theme: 'black-and-white',
+      image: '/images/black-and-white/statue.jpeg',
+      sizes: {
+        A4: 25,
+        A3: 40,
+        A2: 60,
+      },
+    },
+    {
+      id: 'colour-boy-and-girl',
+      title: 'Boy and Girl Statue',
+      collection: 'fine-art',
+      theme: 'colour',
+      image: '/images/architecture/boy-and-girl-statue.jpeg',
+      sizes: {
+        A4: 28,
+        A3: 42,
+        A2: 65,
+      },
+    },
+    {
+      id: 'stock-pos',
+      title: 'POS Girl',
+      collection: 'stock',
+      theme: '',
+      image: '/images/street/POS-girl.jpeg',
+      sizes: {
+        A4: 20,
+        A3: 35,
+        A2: 55,
+      },
+    },
+    {
+      id: 'stock-fish',
+      title: 'Journey of a Fish',
+      collection: 'stock',
+      theme: '',
+      image: '/images/documentary/journey-of-a-fish.jpeg',
+      sizes: {
+        A4: 22,
+        A3: 38,
+        A2: 58,
+      },
+    },
+  ],
+};

@@ -1,20 +1,33 @@
 import { Link, useParams } from 'react-router-dom';
-import fineArtData from '../data/fineArtData';
 import './Gallery.css';
+import { useCatalog } from '../context/CatalogContext';
 
 export default function Gallery() {
   const { theme } = useParams();
+  const { catalog, isLoaded } = useCatalog();
 
-  const filteredImages = fineArtData.filter((item) => item.theme === theme);
-  const pageTitle =
-    theme === 'black-and-white' ? 'Black & White Collection' : 'Colour Collection';
+  const themeData = catalog.fineArtThemes.find((item) => item.slug === theme);
+  const filteredImages = catalog.products.filter(
+    (item) => item.collection === 'fine-art' && item.theme === theme,
+  );
+  const pageTitle = themeData?.title || 'Collection';
+
+  if (!isLoaded) {
+    return (
+      <main className="gallery-page">
+        <div className="gallery-shell">
+          <h1>Loading collection...</h1>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="gallery-page">
       <div className="gallery-shell">
         <h1>{pageTitle}</h1>
         <p className="gallery-intro">
-          A focused selection of photographs available as collectible prints.
+          {themeData?.description || 'A focused selection of photographs available as collectible prints.'}
         </p>
 
         {filteredImages.length === 0 ? (

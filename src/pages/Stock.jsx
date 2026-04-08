@@ -1,10 +1,24 @@
 // src/pages/Stock.jsx
 
 import { Link } from 'react-router-dom';
-import stockData from '../data/stockData';
 import './Stock.css';
+import { useCatalog } from '../context/CatalogContext';
 
 export default function Stock() {
+  const { catalog, isLoaded } = useCatalog();
+  const stockData = catalog.products.filter((item) => item.collection === 'stock');
+
+  if (!isLoaded) {
+    return (
+      <main className="stock-page">
+        <div className="stock-shell">
+          <h1>Stock & Licensing</h1>
+          <p>Loading collection...</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="stock-page">
       <div className="stock-shell">
