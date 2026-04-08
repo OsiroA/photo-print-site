@@ -19,7 +19,7 @@ For Cloudflare Pages / Functions:
 
 For the Cloudflare setup in this repo, leave `VITE_API_URL` unset so the frontend uses the local `/api` function path automatically.
 
-For local Cloudflare-style development, copy [.dev.vars.example](/c:/Users/Oosi/photo-print-site/.dev.vars.example) to `.dev.vars` and fill in your real values.
+For local Cloudflare-style development, copy `.dev.vars.example` to `.dev.vars` and fill in your real values.
 
 ## Deploy on Cloudflare Pages
 
@@ -36,6 +36,6 @@ For local Cloudflare-style development, copy [.dev.vars.example](/c:/Users/Oosi/
 
 ## Notes
 
-- The Stripe checkout endpoint is implemented in [create-checkout-session.js](/c:/Users/Oosi/photo-print-site/functions/api/create-checkout-session.js).
-- React client-side routes are handled by [public/_redirects](/c:/Users/Oosi/photo-print-site/public/_redirects).
+- The Stripe checkout endpoint is implemented in `functions/api/create-checkout-session.js`.
+- React client-side routes are handled by `public/_redirects`.
 - The `/studio` route is a temporary browser-local editor, not yet a shared client CMS.
