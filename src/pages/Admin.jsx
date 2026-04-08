@@ -5,6 +5,14 @@ import './Admin.css';
 
 const CONTENT_STORAGE_KEY = 'photo-print-site-content';
 
+function slugify(value) {
+  return String(value || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 function emptyThemeForm() {
   return {
     slug: '',
@@ -201,12 +209,18 @@ export default function Admin() {
   const handleThemeSubmit = async (event) => {
     event.preventDefault();
 
-    if (!themeForm.slug.trim() || !themeForm.title.trim()) {
-      setCatalogMessage('Theme slug and title are required.');
+    if (!themeForm.title.trim()) {
+      setCatalogMessage('Section title is required.');
       return;
     }
 
-    const slug = themeForm.slug.trim();
+    const slug = themeForm.slug.trim() || slugify(themeForm.title);
+
+    if (!slug) {
+      setCatalogMessage('Unable to generate a valid section link from that title.');
+      return;
+    }
+
     const existingIndex = catalog.fineArtThemes.findIndex((item) => item.slug === slug);
     const nextTheme = {
       slug,
@@ -244,13 +258,20 @@ export default function Admin() {
   const handleProductSubmit = async (event) => {
     event.preventDefault();
 
-    if (!productForm.id.trim() || !productForm.title.trim() || !productForm.image.trim()) {
-      setCatalogMessage('Artwork id, title, and image are required.');
+    if (!productForm.title.trim() || !productForm.image.trim()) {
+      setCatalogMessage('Artwork title and image are required.');
+      return;
+    }
+
+    const generatedId = productForm.id.trim() || slugify(productForm.title);
+
+    if (!generatedId) {
+      setCatalogMessage('Unable to generate a valid artwork reference from that title.');
       return;
     }
 
     const nextProduct = {
-      id: productForm.id.trim(),
+      id: generatedId,
       title: productForm.title.trim(),
       collection: productForm.collection,
       theme: productForm.collection === 'fine-art' ? productForm.theme.trim() : '',
@@ -500,19 +521,15 @@ export default function Admin() {
           <form className="admin-card" onSubmit={handleThemeSubmit}>
             <h2>Fine art section</h2>
             <label>
-              Slug
-              <input
-                value={themeForm.slug}
-                onChange={(event) => setThemeForm((current) => ({ ...current, slug: event.target.value }))}
-              />
-            </label>
-            <label>
               Title
               <input
                 value={themeForm.title}
                 onChange={(event) => setThemeForm((current) => ({ ...current, title: event.target.value }))}
               />
             </label>
+            <p className="admin-help">
+              The section link is generated automatically from the title.
+            </p>
             <label>
               Description
               <textarea
@@ -542,19 +559,15 @@ export default function Admin() {
           <form className="admin-card" onSubmit={handleProductSubmit}>
             <h2>Artwork</h2>
             <label>
-              Artwork id
-              <input
-                value={productForm.id}
-                onChange={(event) => setProductForm((current) => ({ ...current, id: event.target.value }))}
-              />
-            </label>
-            <label>
               Title
               <input
                 value={productForm.title}
                 onChange={(event) => setProductForm((current) => ({ ...current, title: event.target.value }))}
               />
             </label>
+            <p className="admin-help">
+              The artwork reference is generated automatically from the title.
+            </p>
             <label>
               Collection
               <select

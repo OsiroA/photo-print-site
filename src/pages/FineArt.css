@@ -34,9 +34,11 @@
 }
 
 .theme-card img {
+  background: #eadfce;
   width: 100%;
   height: 240px;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center top;
 }
 
 .theme-card h2 {

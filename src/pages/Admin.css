@@ -35,6 +35,12 @@
   color: var(--color-muted);
 }
 
+.admin-help {
+  color: var(--color-muted);
+  font-size: 0.92rem;
+  margin: -0.4rem 0 0;
+}
+
 .admin-form {
   display: grid;
   gap: 1.25rem;

@@ -131,9 +131,11 @@
 }
 
 .gallery-item img {
+  background: #eadfce;
   width: 100%;
   height: 240px;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center top;
 }
 
 .gallery-item h3 {

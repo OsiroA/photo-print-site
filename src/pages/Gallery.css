@@ -39,9 +39,11 @@
 }
 
 .gallery-image {
+  background: #eadfce;
   width: 100%;
   height: 280px;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center top;
 }
 
 .gallery-card h2 {

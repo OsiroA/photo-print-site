@@ -44,8 +44,10 @@
 }
 
 .stock-image {
+  background: #eadfce;
   height: 240px;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center top;
   width: 100%;
 }
 
