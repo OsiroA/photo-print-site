@@ -1,0 +1,125 @@
+.admin-page {
+  background:
+    radial-gradient(circle at top left, rgba(167, 91, 48, 0.16), transparent 35%),
+    linear-gradient(180deg, #f7efe6 0%, #f2e3d2 100%);
+  min-height: calc(100vh - 140px);
+  padding: 3rem 1.25rem 4rem;
+}
+
+.admin-shell {
+  margin: 0 auto;
+  max-width: 1100px;
+}
+
+.admin-intro {
+  margin-bottom: 2rem;
+  max-width: 720px;
+}
+
+.admin-eyebrow {
+  color: var(--color-accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  margin: 0 0 0.75rem;
+  text-transform: uppercase;
+}
+
+.admin-intro h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  margin: 0 0 0.75rem;
+}
+
+.admin-note {
+  color: var(--color-muted);
+}
+
+.admin-form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.admin-card {
+  background: rgba(255, 251, 245, 0.88);
+  border: 1px solid rgba(116, 77, 51, 0.12);
+  border-radius: 24px;
+  box-shadow: 0 18px 45px rgba(76, 46, 26, 0.08);
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.admin-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.admin-card label {
+  color: var(--color-text);
+  display: grid;
+  font-size: 0.95rem;
+  font-weight: 600;
+  gap: 0.45rem;
+}
+
+.admin-card input,
+.admin-card textarea {
+  background: #fffdf9;
+  border: 1px solid rgba(116, 77, 51, 0.2);
+  border-radius: 14px;
+  color: var(--color-text);
+  font: inherit;
+  padding: 0.85rem 1rem;
+}
+
+.admin-card textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.admin-primary,
+.admin-secondary {
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  min-width: 170px;
+  padding: 0.9rem 1.4rem;
+}
+
+.admin-primary {
+  background: var(--color-text);
+  border: none;
+  color: #fef8f1;
+}
+
+.admin-secondary {
+  background: transparent;
+  border: 1px solid rgba(116, 77, 51, 0.25);
+  color: var(--color-text);
+}
+
+.admin-feedback {
+  color: var(--color-accent-dark);
+  font-weight: 600;
+  margin: 0;
+}
+
+@media (min-width: 900px) {
+  .admin-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-actions,
+  .admin-feedback {
+    grid-column: 1 / -1;
+  }
+}

@@ -1,0 +1,25 @@
+/* src/components/Footer.css */
+.footer {
+  background: #281b14;
+  color: #f8efe6;
+  padding: 36px 20px;
+  text-align: center;
+  font-family: var(--font-body);
+}
+
+.footer .social-links {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.footer .social-links a {
+  color: #f0bb9a;
+  font-weight: 700;
+  transition: color 0.3s;
+}
+
+.footer .social-links a:hover {
+  color: #fff5ee;
+}

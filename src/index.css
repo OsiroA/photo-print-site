@@ -1,0 +1,51 @@
+:root {
+  --color-background: #f6ede3;
+  --color-surface: rgba(255, 250, 244, 0.88);
+  --color-surface-solid: #fffaf4;
+  --color-text: #2f221a;
+  --color-muted: #71584a;
+  --color-accent: #b35d34;
+  --color-accent-dark: #8d4322;
+  --color-border: rgba(91, 58, 37, 0.14);
+  --shadow-soft: 0 18px 40px rgba(67, 40, 24, 0.09);
+  --font-body: 'DM Sans', 'Segoe UI', sans-serif;
+  --font-display: 'Georgia', 'Times New Roman', serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top, rgba(199, 121, 74, 0.14), transparent 30%),
+    linear-gradient(180deg, #fbf5ee 0%, #f4e6d7 100%);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+main {
+  min-height: calc(100vh - 160px);
+}

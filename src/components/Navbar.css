@@ -1,0 +1,122 @@
+.navbar {
+  backdrop-filter: blur(16px);
+  background: rgba(255, 248, 241, 0.88);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-body);
+  padding: 18px 32px;
+  position: relative;
+  z-index: 20;
+}
+
+.navbar-logo {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.navbar-logo a {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.navbar-logo small {
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.navbar-toggle {
+  background: var(--color-text);
+  border: none;
+  border-radius: 999px;
+  color: #fef8f1;
+  cursor: pointer;
+  display: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.8rem 1rem;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.navbar-links a {
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  position: relative;
+}
+
+.navbar-links a::after {
+  background: var(--color-accent);
+  bottom: -0.35rem;
+  content: '';
+  height: 2px;
+  left: 0;
+  position: absolute;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+  width: 100%;
+}
+
+.navbar-links a:hover,
+.navbar-links a:focus-visible {
+  color: var(--color-accent-dark);
+}
+
+.navbar-links a:hover::after,
+.navbar-links a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 16px 20px;
+  }
+
+  .navbar-logo {
+    font-size: 1rem;
+    max-width: 72%;
+  }
+
+  .navbar-toggle {
+    display: block;
+  }
+
+  .navbar-links {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 20px;
+    background: rgba(44, 31, 23, 0.96);
+    color: #fff9f3;
+    min-width: 220px;
+    padding: 18px;
+    border-radius: 18px;
+    box-shadow: 0 22px 40px rgba(29, 18, 12, 0.24);
+    z-index: 1000;
+  }
+
+  .navbar-links.open {
+    display: flex;
+  }
+
+  .navbar-links a {
+    color: #fff9f3;
+    margin: 6px 0;
+  }
+}
